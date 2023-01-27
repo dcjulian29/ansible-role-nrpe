@@ -1,0 +1,8 @@
+---
+nrpe_package:
+  - monitoring-plugins-basic
+  - monitoring-plugins-common
+  - nagios-nrpe-server
+nrpe_service: nagios-nrpe-server
+nrpe_plugin_basepath: /usr/lib/nagios/plugins
+nrpe_etc_basepath: /etc/nagios/nrpe.d

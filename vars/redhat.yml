@@ -1,0 +1,13 @@
+---
+nrpe_package:
+  - nrpe'
+  - nagios-plugins-disk
+  - nagios-plugins-load
+  - nagios-plugins-users
+  - nagios-plugins-swap
+  - nagios-plugins-procs
+  - nagios-plugins-ntp
+  - nagios-plugins-smtp
+nrpe_service: nrpe
+nrpe_plugin_basepath: /usr/lib64/nagios/plugins
+nrpe_etc_basepath: /etc/nrpe.d

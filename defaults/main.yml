@@ -1,0 +1,5 @@
+---
+nrpe_check_smarthost: smtp.gmail.com
+nrpe_include_smtp_checks: false
+nrpe_allowedhosts:
+  - '127.0.0.1'
