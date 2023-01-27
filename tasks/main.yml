@@ -41,7 +41,7 @@
 - name: Ensure OS-specific command checks are installed
   ansible.builtin.template:
     src: "commands.{{ ansible_os_family | lower }}.cfg.j2"
-    dest: "{{ nrpe_etc_basepath }}{{ ansible_os_family | lower }}.cfg"
+    dest: "{{ nrpe_etc_basepath }}/{{ ansible_os_family | lower }}.cfg"
     owner: root
     group: root
     mode: u=rw,g=r,o=r
