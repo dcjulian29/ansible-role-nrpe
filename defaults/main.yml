@@ -1,5 +1,20 @@
 ---
+nrpe_check_disk_crit: 10
+nrpe_check_disk_warn: 20
+nrpe_check_load_crit: 30,25,20
+nrpe_check_load_warn: 15,10,5
+nrpe_check_ntp_crit: 1
+nrpe_check_ntp_host: time.nist.gov
+nrpe_check_ntp_warn: 0.5
 nrpe_check_smarthost: smtp.gmail.com
+nrpe_check_swap_crit: 10
+nrpe_check_swap_warn: 20
+nrpe_check_total_procs_crit: 200
+nrpe_check_total_procs_warn: 150
+nrpe_check_users_crit: 5
+nrpe_check_users_warn: 2
+nrpe_check_zombie_procs_crit: 5
+nrpe_check_zombie_procs_warn: 2
 nrpe_include_smtp_checks: false
 nrpe_allowedhosts:
   - '127.0.0.1'

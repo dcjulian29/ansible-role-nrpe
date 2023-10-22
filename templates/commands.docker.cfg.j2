@@ -1,7 +1,0 @@
-command[check_users]={{ nrpe_plugin_basepath }}/check_users -w 2 -c 5
-command[check_load]={{ nrpe_plugin_basepath }}/check_load -w 15,10,5 -c 60,50,40
-command[check_disk]={{ nrpe_plugin_basepath }}/check_disk -w 20% -c 10% -p /
-command[check_total_procs]={{ nrpe_plugin_basepath }}/check_procs -w 300 -c 500
-command[check_zombie_procs]={{ nrpe_plugin_basepath }}/check_procs -w 4 -c 10 -s Z
-command[check_swap]={{ nrpe_plugin_basepath }}/check_swap -w 20% -c 10%
-command[check_ntp_peer]={{ nrpe_plugin_basepath }}/check_ntp_peer -H $(getent ahostsv4 time.nist.gov | awk '{print $1}' | head -1) -w 0.5 -c 1

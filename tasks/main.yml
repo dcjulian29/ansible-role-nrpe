@@ -14,45 +14,38 @@
     replace: '#command\[\1'
   notify: Restart NRPE
 
-- name: Ensure check_yum is installed on RedHat systems.
+- name: Ensure check_yum is installed on YUM based systems
   ansible.builtin.copy:
     src: check_yum.py
     dest: "{{ nrpe_plugin_basepath }}/check_yum"
     owner: root
     group: root
     mode: "0755"
-  when: ansible_os_family == "RedHat"
+  when: ansible_pkg_mgr | lower == "yum"
 
-- name: Determine if Docker installed.
-  ansible.builtin.stat:
-    path: /usr/bin/docker
-  register: is_docker_install
-  ignore_errors: true
-  changed_when: false
-
-- name: Ensure common command checks are installed
+- name: Ensure system check commands are installed
   ansible.builtin.template:
-    src: "{% if is_docker_install.stat.exists %}commands.docker.cfg.j2{% else %}commands.cfg.j2{% endif %}"
-    dest: "{{ nrpe_etc_basepath }}/common.cfg"
+    src: system.cfg.j2
+    dest: "{{ nrpe_etc_basepath }}/system.cfg"
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: "0644"
 
 - name: Ensure OS-specific command checks are installed
   ansible.builtin.template:
-    src: "commands.{{ ansible_os_family | lower }}.cfg.j2"
+    src: "{{ ansible_os_family | lower }}.cfg.j2"
     dest: "{{ nrpe_etc_basepath }}/{{ ansible_os_family | lower }}.cfg"
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: "0644"
 
 - name: Ensure smtp command checks are installed if configured
   ansible.builtin.template:
-    src: commands.smtp.cfg.j2
+    src: smtp.cfg.j2
     dest: "{{ nrpe_etc_basepath }}/smtp.cfg"
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: "0644"
   when: nrpe_include_smtp_checks
 
 - name: Ensure allowed host can connect
@@ -61,4 +54,4 @@
     dest: "{{ nrpe_etc_basepath }}/allowedhosts.cfg"
     owner: root
     group: root
-    mode: u=rw,g=r,o=r
+    mode: "0644"
