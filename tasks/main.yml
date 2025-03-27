@@ -18,7 +18,7 @@
   ansible.builtin.replace:
     path: /etc/nagios/nrpe.cfg
     regexp: "^allow_bash_command_substitution=(.*)$"
-    replace: "allow_bash_command_substitution={{ '1' if nrpe_allow_command_substitution else '0'}}"
+    replace: "allow_bash_command_substitution={{ '1' if nrpe_allow_command_substitution else '0' }}"
   notify: Restart NRPE
 
 - name: Ensure check_yum is installed on YUM based systems
