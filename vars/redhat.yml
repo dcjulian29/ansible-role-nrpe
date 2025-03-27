@@ -1,4 +1,5 @@
 ---
+nrpe_etc_basepath: /etc/nrpe.d
 nrpe_package:
   - nrpe'
   - nagios-plugins-disk
@@ -8,6 +9,5 @@ nrpe_package:
   - nagios-plugins-procs
   - nagios-plugins-ntp
   - nagios-plugins-smtp
-nrpe_service: nrpe
 nrpe_plugin_basepath: /usr/lib64/nagios/plugins
-nrpe_etc_basepath: /etc/nrpe.d
+nrpe_service: nrpe
