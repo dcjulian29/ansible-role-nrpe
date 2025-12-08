@@ -1,4 +1,8 @@
 ---
+nrpe_check_scripts:
+  - name: check_ro_mounts
+    args: -p / -x /run
+  - name: check_yum
 nrpe_etc_basepath: /etc/nrpe.d
 nrpe_package:
   - nrpe'
