@@ -19,11 +19,10 @@ nrpe_check_users_warn: 2
 nrpe_check_zombie_procs_crit: 5
 nrpe_check_zombie_procs_warn: 2
 nrpe_custom_check_scripts: []
-# - command: command[check_my_application]={{ nrpe_plugin_basepath }}/check_my_application -w 2 -c 5
-#   args: -w 25 -c 50
-#   name: check_my_application
-#   script: |
-#     #!/usr/bin/perl -w
-#
-#     print "MY_APPLICATION OK: Application is good\n";
+  # - args: -w 25 -c 50
+  #   name: check_my_application
+  #   script: |
+  #     #!/usr/bin/perl -w
+
+  #     print "MY_APPLICATION OK: Application is good\n";
 nrpe_include_smtp_checks: false

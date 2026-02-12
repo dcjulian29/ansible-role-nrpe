@@ -1,11 +1,12 @@
 ---
-nrpe_check_scripts:
+nrpe_additional_check_scripts:
   - name: check_ro_mounts
     args: -p / -x /run
-  - name: check_yum
+  - name: check_dnf
 nrpe_etc_basepath: /etc/nrpe.d
 nrpe_package:
-  - nrpe'
+  - nrpe
+  - ruby
   - nagios-plugins-disk
   - nagios-plugins-load
   - nagios-plugins-users

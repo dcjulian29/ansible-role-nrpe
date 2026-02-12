@@ -1,11 +1,12 @@
 ---
-nrpe_check_scripts:
-  - name: check_ro_mounts
-    args: -p / -x /run
+nrpe_additional_check_scripts:
+  - args: -p / -x /run
+    name: check_ro_mounts
 nrpe_etc_basepath: /etc/nagios/nrpe.d
 nrpe_package:
+  - nagios-nrpe-server
   - monitoring-plugins-basic
   - monitoring-plugins-common
-  - nagios-nrpe-server
+  - monitoring-plugins-standard
 nrpe_plugin_basepath: /usr/lib/nagios/plugins
 nrpe_service: nagios-nrpe-server
