@@ -1,8 +1,8 @@
 command[check_local_smtp_v4]={{ nrpe_plugin_basepath }}/check_smtp -H 127.0.0.1 -4
-{% if ansible_default_ipv6.address is defined %}
+{% if ansible_facts['default_ipv6'].address is defined %}
 command[check_local_smtp_v6]={{ nrpe_plugin_basepath }}/check_smtp -H ::1 -6
 {% endif %}
 command[check_smarthost_v4]={{ nrpe_plugin_basepath }}/check_smtp -H {{ nrpe_check_smarthost }} -4
-{% if ansible_default_ipv6.address is defined %}
+{% if ansible_facts['default_ipv6'].address is defined %}
 command[check_smarthost_v6]={{ nrpe_plugin_basepath }}/check_smtp -H {{ nrpe_check_smarthost }} -6
 {% endif %}
