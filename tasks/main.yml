@@ -1,11 +1,19 @@
 ---
 - name: Include OS-specific variables
-  ansible.builtin.include_vars: "{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_facts['distribution'] | lower }}.yml"
+        - "{{ ansible_facts['os_family'] | lower }}.yml"
+      paths:
+        - vars
 
 - name: Ensure NRPE package and plugins are installed
   ansible.builtin.package:
-    name: "{{ nrpe_package }}"
+    name: "{{ item }}"
     state: present
+  loop: "{{ nrpe_package }}"
 
 - name: Ensure default commands are disabled
   ansible.builtin.replace:
@@ -21,47 +29,54 @@
     replace: "allow_bash_command_substitution={{ '1' if nrpe_allow_command_substitution else '0' }}"
   notify: Restart NRPE
 
-- name: Ensure additional check scripts are present
-  ansible.builtin.copy:
-    src: "{{ item.name }}"
-    dest: "{{ nrpe_plugin_basepath }}/{{ item.name }}"
-    owner: root
-    group: root
-    mode: "0755"
-  with_items: "{{ nrpe_check_scripts }}"
-
-- name: Ensure custom check scripts are present
-  ansible.builtin.copy:
-    content: "{{ item.script }}"
-    dest: "{{ nrpe_plugin_basepath }}/{{ item.name }}"
-    owner: root
-    group: root
-    mode: "0755"
-  loop: "{{ nrpe_custom_check_scripts }}"
-  loop_control:
-    label: "{{ item.name }}"
+- name: Ensure custom checks are present and enabled
   when: nrpe_custom_check_scripts | length > 0
+  block:
+    - name: Ensure custom check script file exist
+      ansible.builtin.copy:
+        content: |
+          {{ item.script }}
+        dest: "{{ nrpe_plugin_basepath }}/{{ item.name }}"
+        owner: root
+        group: root
+        mode: "0755"
+      loop: "{{ nrpe_custom_check_scripts }}"
+      loop_control:
+        label: "{{ item.name }}"
 
-- name: Ensure additonal check scripts are enabled
-  ansible.builtin.template:
-    dest: "{{ nrpe_etc_basepath }}/{{ item.name}}.cfg"
-    mode: "0644"
-    owner: root
-    src: custom.cfg.j2
-  loop: "{{ nrpe_check_scripts }}"
-  loop_control:
-    label: "{{ item.name }}"
+    - name: Ensure custom check script command exist
+      ansible.builtin.template:
+        dest: "{{ nrpe_etc_basepath }}/{{ item.name}}.cfg"
+        mode: "0644"
+        owner: root
+        src: custom.cfg.j2
+      loop: "{{ nrpe_custom_check_scripts }}"
+      loop_control:
+        label: "{{ item.name }}"
 
-- name: Ensure custom check scripts are enabled
-  ansible.builtin.template:
-    dest: "{{ nrpe_etc_basepath }}/{{ item.name}}.cfg"
-    mode: "0644"
-    owner: root
-    src: custom.cfg.j2
-  loop: "{{ nrpe_custom_check_scripts }}"
-  loop_control:
-    label: "{{ item.name }}"
-  when: nrpe_custom_check_scripts | length > 0
+- name: Ensure additional check scripts are present and enabled
+  when: nrpe_additional_check_scripts | length > 0
+  block:
+    - name: Ensure additional check script file exist
+      ansible.builtin.copy:
+        src: "{{ item.name }}"
+        dest: "{{ nrpe_plugin_basepath }}/{{ item.name }}"
+        owner: root
+        group: root
+        mode: "0755"
+      loop: "{{ nrpe_additional_check_scripts }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Ensure additional check scripts command exist
+      ansible.builtin.template:
+        dest: "{{ nrpe_etc_basepath }}/{{ item.name}}.cfg"
+        mode: "0644"
+        owner: root
+        src: custom.cfg.j2
+      loop: "{{ nrpe_additional_check_scripts }}"
+      loop_control:
+        label: "{{ item.name }}"
 
 - name: Ensure system check commands are present
   ansible.builtin.template:
@@ -73,8 +88,8 @@
 
 - name: Ensure OS-specific command checks are present
   ansible.builtin.template:
-    src: "{{ ansible_os_family | lower }}.cfg.j2"
-    dest: "{{ nrpe_etc_basepath }}/{{ ansible_os_family | lower }}.cfg"
+    src: "{{ ansible_facts['os_family'] | lower }}.cfg.j2"
+    dest: "{{ nrpe_etc_basepath }}/{{ ansible_facts['os_family'] | lower }}.cfg"
     owner: root
     group: root
     mode: "0644"
