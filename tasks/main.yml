@@ -46,7 +46,7 @@
 
     - name: Ensure custom check script command exist
       ansible.builtin.template:
-        dest: "{{ nrpe_etc_basepath }}/{{ item.name}}.cfg"
+        dest: "{{ nrpe_etc_basepath }}/{{ item.name }}.cfg"
         mode: "0644"
         owner: root
         src: custom.cfg.j2
@@ -70,7 +70,7 @@
 
     - name: Ensure additional check scripts command exist
       ansible.builtin.template:
-        dest: "{{ nrpe_etc_basepath }}/{{ item.name}}.cfg"
+        dest: "{{ nrpe_etc_basepath }}/{{ item.name }}.cfg"
         mode: "0644"
         owner: root
         src: custom.cfg.j2
